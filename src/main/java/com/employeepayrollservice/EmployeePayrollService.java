@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Scanner;
 
 import static com.employeepayrollservice.EmployeePayrollService.IOService.DB_IO;
@@ -103,4 +104,34 @@ public class EmployeePayrollService {
             return employeePayrollDatabaseService.getEmployeeForDateRange(startDate, endDate);
         return null;
     }
+    public Map<String, Double> readAverageSalaryByGender(IOService ioService) throws PayrollServiceException {
+        if (ioService.equals(IOService.DB_IO))
+            return employeePayrollDatabaseService.getAverageSalaryByGender();
+        return null;
+    }
+
+    public Map<String, Double> readCountByGender(IOService ioService) throws PayrollServiceException {
+        if (ioService.equals(IOService.DB_IO))
+            return employeePayrollDatabaseService.getCountByGender();
+        return null;
+    }
+
+    public Map<String, Double> readMinumumSalaryByGender(IOService ioService) {
+        if (ioService.equals(IOService.DB_IO))
+            return employeePayrollDatabaseService.getMinimumByGender();
+        return null;
+    }
+
+    public Map<String, Double> readMaximumSalaryByGender(IOService ioService) {
+        if (ioService.equals(IOService.DB_IO))
+            return employeePayrollDatabaseService.getMaximumByGender();
+        return null;
+    }
+
+    public Map<String, Double> readSumSalaryByGender(IOService ioService) {
+        if (ioService.equals(IOService.DB_IO))
+            return employeePayrollDatabaseService.getSalarySumByGender();
+        return null;
+    }
+
 }
