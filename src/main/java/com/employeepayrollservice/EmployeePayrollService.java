@@ -1,10 +1,15 @@
 package com.employeepayrollservice;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 import java.util.Scanner;
 
+import static com.employeepayrollservice.EmployeePayrollService.IOService.DB_IO;
+
 public class EmployeePayrollService {
+
     public enum IOService{CONSOLE_IO,FILE_IO,DB_IO,REST_IO}
     private  EmployeePayrollDatabaseService employeePayrollDatabaseService;
     private List<EmployeePayrollData> employeePayrollList;
@@ -63,7 +68,7 @@ public class EmployeePayrollService {
     }
 
     public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) throws PayrollServiceException {
-        if(ioService.equals(IOService.DB_IO))
+        if(ioService.equals(DB_IO))
             this.employeePayrollList = employeePayrollDatabaseService.readData();
         return employeePayrollList;
     }
@@ -92,6 +97,10 @@ public class EmployeePayrollService {
 
     }
 
-
-
+    public List<EmployeePayrollData> readEmployeePayrollForDateRange(IOService ioService, LocalDate startDate,
+                                                                     LocalDate endDate) throws PayrollServiceException {
+        if (ioService.equals(IOService.DB_IO))
+            return employeePayrollDatabaseService.getEmployeeForDateRange(startDate, endDate);
+        return null;
+    }
 }

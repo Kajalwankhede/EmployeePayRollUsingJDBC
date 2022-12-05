@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,4 +52,15 @@ public class EmployeePayRollDatabaseTest {
         boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
         Assert.assertTrue(result);
     }
+    @Test
+    public void givenDateRangeWhenRetrievedShouldMatchEmployeeCount() throws PayrollServiceException {
+        EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+        employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
+        LocalDate startDate = LocalDate.of(2019, 11, 13);
+        LocalDate endDate = LocalDate.now();
+        List<EmployeePayrollData> employeePayrollData = employeePayrollService
+                .readEmployeePayrollForDateRange(EmployeePayrollService.IOService.DB_IO, startDate, endDate);
+        Assert.assertEquals(5, employeePayrollData.size());
+    }
+
 }
