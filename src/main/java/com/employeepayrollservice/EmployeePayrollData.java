@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class EmployeePayrollData {
     private int id;
-    private String name;
-    private double salary;
+     String name;
+     double salary;
     private LocalDate start;
     public EmployeePayrollData(int id, String name, double salary) {
         this.id = id;
@@ -16,6 +16,31 @@ public class EmployeePayrollData {
         this(id, name, salary);
         this.start = start;
     }
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        EmployeePayrollData other = (EmployeePayrollData) obj;
+        if (id != other.id)
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (Double.doubleToLongBits(salary) != Double.doubleToLongBits(other.salary))
+            return false;
+        if (start == null) {
+            if (other.start != null)
+                return false;
+        } else if (!start.equals(other.start))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
         return "EmployeePayrollData{" +

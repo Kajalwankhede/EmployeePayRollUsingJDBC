@@ -12,9 +12,9 @@ import java.util.List;
 
 public class EmployeePayRollDatabaseTest {
     static EmployeePayrollService employeePayrollService;
+
     @BeforeClass
-    public static void initializeConstructor()
-    {
+    public static void initializeConstructor() {
         employeePayrollService = new EmployeePayrollService();
     }
 
@@ -42,6 +42,14 @@ public class EmployeePayRollDatabaseTest {
     @Test
     public void givenEmployeePayrollinDBwhenRetrievedShouldMatchEmployeeCount() throws PayrollServiceException {
         List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
-      Assert.assertEquals(3, employeePayrollData.size());
+        Assert.assertEquals(5, employeePayrollData.size());
+    }
+
+    @Test
+    public void givenNewSalaryForEmployee_WhenUpdated_shouldSynchronizewithDataBase() throws PayrollServiceException {
+        List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
+        employeePayrollService.updateEmployeeSalary("Terisa", 3000000.00);
+        boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
+        Assert.assertTrue(result);
     }
 }

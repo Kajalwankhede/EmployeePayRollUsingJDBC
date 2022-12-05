@@ -6,11 +6,15 @@ import java.util.Scanner;
 
 public class EmployeePayrollService {
     public enum IOService{CONSOLE_IO,FILE_IO,DB_IO,REST_IO}
+    private  EmployeePayrollDatabaseService employeePayrollDatabaseService;
     private List<EmployeePayrollData> employeePayrollList;
-    public EmployeePayrollService(){
-    }
+
     public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList){
+        this();
         this.employeePayrollList = employeePayrollList;
+    }
+    public  EmployeePayrollService(){
+        employeePayrollDatabaseService=EmployeePayrollDatabaseService.getInstance();
     }
     public static void main(String[] args) {
         ArrayList<EmployeePayrollData> employeePayrollList=new ArrayList<EmployeePayrollData>();
@@ -60,8 +64,34 @@ public class EmployeePayrollService {
 
     public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) throws PayrollServiceException {
         if(ioService.equals(IOService.DB_IO))
-            this.employeePayrollList = new EmployeePayrollFileIOService().readData();
+            this.employeePayrollList = employeePayrollDatabaseService.readData();
         return employeePayrollList;
     }
+    public void updateEmployeeSalary(String name, double salary) throws PayrollServiceException {
+        int result = employeePayrollDatabaseService.updateEmployeeData(name, salary);
+        if (result == 0)
+            return;
+        EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+        if (employeePayrollData != null)
+            employeePayrollData.salary = salary;
+
+    }
+
+    private EmployeePayrollData getEmployeePayrollData(String name) {
+        EmployeePayrollData employeePayrollData;
+        employeePayrollData = this.employeePayrollList.stream()
+                .filter(employeePayrollDataItem -> employeePayrollDataItem.name.equals(name))
+                .findFirst()
+                .orElse(null);
+        return employeePayrollData;
+    }
+
+    public boolean checkEmployeePayrollInSyncWithDB(String name) {
+        List<EmployeePayrollData> employeePayrollDataList = employeePayrollDatabaseService.getEmployeePayrollData(name);
+        return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
+
+    }
+
+
 
 }
