@@ -3,13 +3,13 @@ package com.employeepayrollservice;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.Scanner;
 
 import static com.employeepayrollservice.EmployeePayrollService.IOService.DB_IO;
 
 public class EmployeePayrollService {
+
 
     public enum IOService{CONSOLE_IO,FILE_IO,DB_IO,REST_IO}
     private  EmployeePayrollDatabaseService employeePayrollDatabaseService;
@@ -93,8 +93,8 @@ public class EmployeePayrollService {
     }
 
     public boolean checkEmployeePayrollInSyncWithDB(String name) {
-        List<EmployeePayrollData> employeePayrollDataList = employeePayrollDatabaseService.getEmployeePayrollData(name);
-        return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
+         employeePayrollList = employeePayrollDatabaseService.getEmployeePayrollData(name);
+        return employeePayrollList.get(0).equals(getEmployeePayrollData(name));
 
     }
 
@@ -133,5 +133,9 @@ public class EmployeePayrollService {
             return employeePayrollDatabaseService.getSalarySumByGender();
         return null;
     }
+    public void addEmployeeToPayroll(String name, double salary, LocalDate startDate, String gender) throws PayrollServiceException {
+        employeePayrollList.add(employeePayrollDatabaseService.addEmployeeToPayroll(name, salary, startDate, gender));
+    }
+
 
 }
