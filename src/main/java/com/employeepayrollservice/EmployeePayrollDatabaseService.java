@@ -1,5 +1,4 @@
 package com.employeepayrollservice;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -215,9 +214,9 @@ public class EmployeePayrollDatabaseService {
         EmployeePayrollData employeePayrollData = null;
         try {
             connection = this.getConnection();
+            connection.setAutoCommit(false);
         } catch (SQLException e) {
-            throw new PayrollServiceException(e.getMessage(),
-                    PayrollServiceException.ExceptionType.CONNECTION_PROBLEM);
+            throw new PayrollServiceException(e.getMessage(),PayrollServiceException.ExceptionType.CONNECTION_PROBLEM);
         }
         try (Statement statement = connection.createStatement()) {
             String sql = String.format(
@@ -230,8 +229,13 @@ public class EmployeePayrollDatabaseService {
                     employeeId = resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            throw new PayrollServiceException(e.getMessage(),
-                    PayrollServiceException.ExceptionType.INSERTION_PROBLEM);
+           try{
+               connection.rollback();
+           }
+           catch (SQLException e1){
+               e1.printStackTrace();
+           }
+           throw new PayrollServiceException(e.getMessage(),PayrollServiceException.ExceptionType.INSERTION_PROBLEM);
         }
 
         try (Statement statement = connection.createStatement()) {
@@ -248,7 +252,27 @@ public class EmployeePayrollDatabaseService {
                 employeePayrollData = new EmployeePayrollData(employeeId, name, salary, startDate);
             }
         } catch (SQLException e) {
+            try{
+                connection.rollback();
+                return employeePayrollData;
+            }catch (SQLException exception){
+                exception.printStackTrace();
+            }
+            throw new PayrollServiceException(e.getMessage(),PayrollServiceException.ExceptionType.INSERTION_PROBLEM);
+        }try{
+            connection.commit();
+        }catch (SQLException e){
             e.printStackTrace();
+        }finally {
+            {
+                if (connection!=null){
+                    try{
+                        connection.close();
+                    }catch (SQLException e){
+                        throw new PayrollServiceException(e.getMessage(),PayrollServiceException.ExceptionType.CONNECTION_PROBLEM);
+                    }
+                }
+            }
         }
         return employeePayrollData;
     }
