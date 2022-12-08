@@ -102,7 +102,7 @@ public class EmployeePayRollDatabaseTest {
     }
 
     @Test
-    public void givenPayrollData_whenAverageSalaryRetrievedByGendershouldReturnProperSumValue()
+    public void givenPayrollDataWhenAverageSalaryRetrievedByGendershouldReturnProperSumValue()
             throws PayrollServiceException {
         employeePayrollService.readEmployeePayrollData(DB_IO);
         Map<String, Double> sumSalaryByGender = employeePayrollService.readSumSalaryByGender(DB_IO);
@@ -110,7 +110,7 @@ public class EmployeePayRollDatabaseTest {
     }
 
     @Test
-    public void givenNeEmployee_whenAaddedShouldSyncWithTheDatabase() throws PayrollServiceException {
+    public void givenNeEmployeeWhenAaddedShouldSyncWithTheDatabase() throws PayrollServiceException {
         employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
         employeePayrollService.addEmployeeToPayroll("Mark", 5000000.00, LocalDate.now(), "male");
         boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
