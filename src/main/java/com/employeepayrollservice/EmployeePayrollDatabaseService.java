@@ -12,7 +12,7 @@ public class EmployeePayrollDatabaseService {
     private static EmployeePayrollDatabaseService employeePayrollDatabaseService;
 
 
-    private class EmployeePayrollDBService {
+    private static class EmployeePayrollDBService {
     }
         static Connection getConnection() throws SQLException {
             String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSl=false";
@@ -207,6 +207,24 @@ public class EmployeePayrollDatabaseService {
         }
         return employeePayrollData;
     }
+    private List<EmployeePayrollData> getEmployeePayrollDataUsingQuery(String sql) {
+        List<EmployeePayrollData> employeePayrollList = null;
+        try (Connection connection = EmployeePayrollDatabaseService.getConnection();) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet result = preparedStatement.executeQuery(sql);
+            employeePayrollList = this.getEmployeePayrollData(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employeePayrollList;
+    }
+
+    public List<EmployeePayrollData> readActiveEmployeeData() {
+        String sql = "select e.id,e.name,e.start,e.gender,e.salary from employee_payroll e inner join"
+                + " employee_dept ed on e.id=ed.EmpId inner join department d on ed.DeptId=d.DeptId where is_active=true ;";
+        return this.getEmployeePayrollDataUsingQuery(sql);
+    }
+
 }
 
 

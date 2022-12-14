@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.employeepayrollservice.EmployeePayrollService.IOService.DB_IO;
+import static junit.framework.Assert.assertEquals;
 
 public class EmployeePayRollDatabaseTest {
     static EmployeePayrollService employeePayrollService;
@@ -114,6 +115,17 @@ public class EmployeePayRollDatabaseTest {
         employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
         employeePayrollService.addEmployeeToPayroll("Mark", 5000000.00, LocalDate.now(), "male");
      employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
+
+    }
+    @Test
+    public void givenEmployeeWhenRemovedShouldRemainInDatabase() throws PayrollServiceException {
+        EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+        employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
+        int countOfEmployeeRemoved = employeePayrollService.removeEmployeeFromPayroll("Mark", EmployeePayrollService.IOService.DB_IO);
+        Assert.assertEquals(21, countOfEmployeeRemoved);
+       List<EmployeePayrollData> employeePayrollData = employeePayrollService
+                .readActiveEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
+//            Assert.assertEquals(5, employeePayrollData.size());
 
     }
 

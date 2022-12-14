@@ -12,7 +12,7 @@ public class EmployeePayrollService {
 
 
     public enum IOService{CONSOLE_IO,FILE_IO,DB_IO,REST_IO}
-    private  EmployeePayrollDBServiceERD employeePayrollDBServiceERD;
+    private static EmployeePayrollDBServiceERD employeePayrollDBServiceERD;
     private EmployeePayrollDatabaseService employeePayrollDatabaseService;
     private List<EmployeePayrollData> employeePayrollList;
 
@@ -140,7 +140,7 @@ public class EmployeePayrollService {
         employeePayrollList.add(employeePayrollDBServiceERD.addEmployeeToPayroll(name, salary, startDate, gender));
     }
 
-    public int removeEmployeeFromPayroll(String name, IOService ioService) {
+    public static int removeEmployeeFromPayroll(String name, IOService ioService) {
         int employeeCount=0;
         if (ioService.equals(IOService.DB_IO))
             employeeCount=employeePayrollDBServiceERD.removeEmployee(name);
@@ -154,3 +154,6 @@ public class EmployeePayrollService {
     }
 
 }
+
+
+
