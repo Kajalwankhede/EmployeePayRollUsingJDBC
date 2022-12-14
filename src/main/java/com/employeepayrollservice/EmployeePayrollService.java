@@ -12,7 +12,8 @@ public class EmployeePayrollService {
 
 
     public enum IOService{CONSOLE_IO,FILE_IO,DB_IO,REST_IO}
-    private  EmployeePayrollDatabaseService employeePayrollDatabaseService;
+    private  EmployeePayrollDBServiceERD employeePayrollDBServiceERD;
+    private EmployeePayrollDatabaseService employeePayrollDatabaseService;
     private List<EmployeePayrollData> employeePayrollList;
 
     public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList){
@@ -20,6 +21,7 @@ public class EmployeePayrollService {
         this.employeePayrollList = employeePayrollList;
     }
     public  EmployeePayrollService(){
+        employeePayrollDBServiceERD=EmployeePayrollDBServiceERD.getInstance();
         employeePayrollDatabaseService=EmployeePayrollDatabaseService.getInstance();
     }
     public static void main(String[] args) {
@@ -134,8 +136,21 @@ public class EmployeePayrollService {
         return null;
     }
     public void addEmployeeToPayroll(String name, double salary, LocalDate startDate, String gender) throws PayrollServiceException {
-        employeePayrollList.add(employeePayrollDatabaseService.addEmployeeToPayroll(name, salary, startDate, gender));
+        //employeePayrollList.add(employeePayrollDatabaseService.addEmployeeToPayroll(name, salary, startDate, gender));
+        employeePayrollList.add(employeePayrollDBServiceERD.addEmployeeToPayroll(name, salary, startDate, gender));
     }
 
+    public int removeEmployeeFromPayroll(String name, IOService ioService) {
+        int employeeCount=0;
+        if (ioService.equals(IOService.DB_IO))
+            employeeCount=employeePayrollDBServiceERD.removeEmployee(name);
+        return employeeCount;
+    }
+
+    public List<EmployeePayrollData> readActiveEmployeePayrollData(IOService ioService) {
+        if (ioService.equals(IOService.DB_IO))
+            this.employeePayrollList = employeePayrollDatabaseService.readActiveEmployeeData();
+        return this.employeePayrollList;
+    }
 
 }

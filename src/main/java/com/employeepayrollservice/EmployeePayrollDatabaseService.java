@@ -14,7 +14,7 @@ public class EmployeePayrollDatabaseService {
 
     private class EmployeePayrollDBService {
     }
-        private Connection getConnection() throws SQLException {
+        static Connection getConnection() throws SQLException {
             String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSl=false";
             String userName = "root";
             String password = "Kajal@123";
