@@ -98,7 +98,6 @@ public class EmployeePayrollDBServiceERD {
             throw new PayrollServiceException(e.getMessage(),
                     PayrollServiceException.ExceptionType.INSERTION_PROBLEM);
         }
-
         try (Statement statement = connection.createStatement()) {
             int DeptId1 = 203;
             String sql1 = String.format("insert into employee_dept(DeptId,employeeId) values('%s','%s')", employeeId, DeptId1);
@@ -141,8 +140,7 @@ public class EmployeePayrollDBServiceERD {
                     throw new PayrollServiceException(e.getMessage(),
                             PayrollServiceException.ExceptionType.CONNECTION_PROBLEM);
                 }
-
-            return employeePayrollData;
+           return employeePayrollData;
         }
 
     }
